@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> result;
+        if(digits.size() == 0) {
+            return result;
+        }
+        
+        map<int, vector<char> > phoneMap;
+        char letter = 'a';
+        for(int i = 2; i <= 9; ++i) {
+            int j = 0;
+            while(j < 3) {
+                phoneMap[i].push_back(letter);
+                letter++;
+                j++;
+            }
+            if(i == 7 || i == 9) {
+                phoneMap[i].push_back(letter);
+                letter++;
+            }
+        }
+        string solution;
+        
+        letterComb(digits, result, solution, 0, phoneMap);
+        
+    }
+    
+    void letterComb(string &digits, vector<string> &result, string &solution, int start, map<int, vector<char> > &phoneMap) {
+            if(solution.size() == digits.size()) {
+                result.push_back(solution);
+                return;
+            }
+            int temp = int (digits[start] - '0');
+            for(int i = 0; i < phoneMap[temp].size(); ++i) {
+                solution.push_back(phoneMap[temp][i]);
+                letterComb(digits,result,solution,start+1,phoneMap);
+                solution.pop_back();
+            }
+    }
+};
