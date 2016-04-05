@@ -1,0 +1,74 @@
+栈
+
+这个方法简单的说就是不断的砍掉叶子节点。最后看看能不能全部砍掉。
+
+已例子一为例，：”9,3,4,#,#,1,#,#,2,#,6,#,#” 遇到x # #的时候，就把它变为 #
+
+我模拟一遍过程：
+
+9,3,4,#,# => 9,3,# 继续读
+9,3,#,1,#,# => 9,3,#,# => 9,# 继续读
+9,#2,#,6,#,# => 9,#,2,#,# => 9,#,# => #
+
+
+
+
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        int n = preorder.size();
+        if(n == 0) {
+            return false;
+        }
+        if(preorder[0] == '#'){
+            if(n == 1) {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        
+        stack<string> s;
+        
+        int i = 0;
+        int j = 0;
+        string temp;
+        string temp2;
+        while(i < n) {
+            if(isdigit(preorder[i])) {
+                j = i;
+                while(i+1 <n && isdigit(preorder[i+1])){
+                    ++i;
+                }
+                string num = preorder.substr(j, i-j+1);
+                s.push(num);
+            }
+            else if (preorder[i] == '#'){
+                temp = s.top();
+                while(temp[0] == '#' && s.size() > 1) {
+                    s.pop();
+                    temp2 = s.top();
+                    if(temp2[0] == '#'){
+                        return false;
+                    }
+                    s.pop();
+                    if(s.size() != 0) {
+                        temp = s.top();
+                    }
+                }
+                s.push("#");
+            }
+            ++i;
+        }
+        
+        if(s.size() == 1 && s.top() == "#"){
+            return true;
+        }
+        
+        return false;
+        
+        
+        
+    }
+};
