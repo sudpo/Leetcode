@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int n = s.size();
+        if(n <= 1){
+            return n;
+        }
+        int left = 0, right = 0, len = 1;
+        unordered_set<char> hash;
+        while(right < n) {
+            if(hash.find(s[right]) == hash.end()){
+                hash.insert(s[right]);
+                right++;
+                len = max(len, right-left);
+            }
+            else{
+                while(s[left] != s[right]) {
+                    hash.erase(s[left]);
+                    left++;
+                }
+                left++;
+                right++;
+            }
+        }
+        return len;
+        
+    }
+};
+
+//超时 暴力解法
+class Solution {
+public:
+    /**
+     * @param s: a string
+     * @return: an integer 
+     */
+    int lengthOfLongestSubstring(string s) {
+        // write your code here
+        int n = s.size();
+        if(n <= 1){
+            return n;
+        }
+        
+        int result = 1;
+        for(int i = 0; i < n; ++i) {
+            set<char> hash;
+            hash.insert(s[i]);
+            int longest = 1;
+            for(int j = i+1; j < n; ++j ){
+                if(hash.find(s[j]) == hash.end()) {
+                    longest++;
+                    hash.insert(s[j]);
+                    result = max(result, longest);
+                }
+                else{
+                    result = max(result, longest);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+};
