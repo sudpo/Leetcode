@@ -1,0 +1,80 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int> > res;
+        int n = nums.size();
+        if(n < 4) {
+            return res;
+        }
+        
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i < n-3; ++i) {
+            if(i != 0 && nums[i] == nums[i-1]){
+                continue;
+            }
+            
+            int target_3sum = target - nums[i];
+            
+            for(int j = i+1; j < n-2; ++j) {
+                if(j != i+1 && nums[j] == nums[j-1]){
+                    continue;
+                }
+                int start = j+1;
+                int end = n-1;
+                while(start < end) {
+                    int diff = nums[j] + nums[start] + nums[end] - target_3sum;
+                    if(diff == 0) {
+                        vector<int> solution;
+                        solution.push_back(nums[i]);
+                        solution.push_back(nums[j]);
+                        solution.push_back(nums[start]);
+                        solution.push_back(nums[end]);
+                        res.push_back(solution);
+                        start++;
+                        end--;
+                        while(start < end) {
+                            if(nums[start] != nums[start-1]){
+                                break;
+                            }
+                            else{
+                                start++;
+                            }
+                        }
+                        
+                        while(start < end) {
+                            if(nums[end] != nums[end+1]) {
+                                break;
+                            }
+                            else{
+                                end--;
+                            }
+                        }
+                    }
+                    if(diff > 0) {
+                        end--;
+                        while(start < end) {
+                            if(nums[end] != nums[end+1]) {
+                                break;
+                            }
+                            else{
+                                end--;
+                            }
+                        }
+                    }
+                    if(diff < 0){
+                        start++;
+                        while(start < end) {
+                            if(nums[start] != nums[start-1]){
+                                break;
+                            }
+                            else{
+                                start++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
