@@ -72,3 +72,63 @@ public:
         
     }
 };
+
+对于二叉树，我们把空的地方也作为叶子节点（如题目中的#），那么有
+
+所有的非空节点提供2个出度和1个入度（根除外）
+所有的空节点但提供0个出度和1个入度
+我们在遍历的时候，计算diff = outdegree – indegree. 当一个节点出现的时候，diff – 1，因为它提供一个入度；当节点不是#的时候，diff+2(提供两个出度) 如果序列式合法的，那么遍历过程中diff >=0 且最后结果为0.
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        int n = preorder.size();
+        if(n == 0) {
+            return false;
+        }
+        if(preorder[0] == '#'){
+            if(n == 1) {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        
+        vector<string> s;
+        
+        int i = 0;
+        int j = 0;
+        string temp;
+        string temp2;
+        while(i < n) {
+            if(isdigit(preorder[i])) {
+                j = i;
+                while(i+1 <n && isdigit(preorder[i+1])){
+                    ++i;
+                }
+                string num = preorder.substr(j, i-j+1);
+                s.push_back(num);
+            }
+            else if (preorder[i] == '#'){
+               s.push_back("#");
+            }
+            i++;
+        }
+        
+        int diff = 1;
+        for(int i = 0; i < s.size(); ++i) {
+            --diff;
+            if(diff < 0) {
+                return false;
+            }
+            if(s[i] != "#") {
+                diff += 2;
+            }
+        }
+        
+        return diff == 0;
+        
+        
+        
+    }
+};
