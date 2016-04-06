@@ -1,0 +1,29 @@
+class Solution {
+    void sumHelper(vector<int>& candidates, int target, vector<vector<int> > &res, vector<int> &solution, int start){
+        if(target == 0) {
+            res.push_back(solution);
+            return;
+        }
+        for(int i = start; i < candidates.size(); ++i) {
+            if(candidates[i] > target) {
+                return;
+            }
+            if((i == start || candidates[i] != candidates[i-1]) && target - candidates[i] >= 0){
+                solution.push_back(candidates[i]);
+                sumHelper(candidates, target-candidates[i], res, solution, i+1);
+                solution.pop_back();
+            }
+        }
+    }
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        int n = candidates.size();
+        vector<vector<int> > res;
+        
+        sort(candidates.begin(), candidates.end());
+        vector<int> solution;
+        sumHelper(candidates, target, res, solution, 0);
+        return res;
+        
+    }
+};
