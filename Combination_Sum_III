@@ -1,0 +1,23 @@
+class Solution {
+    void sumHelper(int k, int n, vector<vector<int> > &res, vector<int> &solution, int start) {
+        if(k == 0 && n == 0) {
+            res.push_back(solution);
+            return;
+        }
+        if(start > n ){
+            return;
+        }
+        for(int i = start; i <= 9; ++i) {
+            solution.push_back(i);
+            sumHelper(k-1, n-i, res, solution, i+1);
+            solution.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int> > res;
+        vector<int> solution;
+        sumHelper(k, n, res, solution, 1);
+        return res;
+    }
+};
