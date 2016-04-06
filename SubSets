@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int> > res;
+        if(n == 0){
+            return res;
+        }
+        
+        vector<int> solution;
+        sort(nums.begin(), nums.end());
+        subsets(nums, solution, 0 , res);
+        return res;
+        
+    }
+    
+    void subsets(vector<int> &nums, vector<int> solution, int start, vector<vector<int> > &res){
+        res.push_back(solution);
+        for(int i = start; i < nums.size(); ++i) {
+            solution.push_back(nums[i]);
+            subsets(nums, solution, i+1, res);
+            solution.pop_back();
+        }
+    }
+};
