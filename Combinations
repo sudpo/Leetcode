@@ -1,0 +1,26 @@
+class Solution {
+    void combineHelper(vector<vector<int> > &res, vector<int> &solution, int start, int k, int n){
+        
+        if(solution.size() == k) {
+            res.push_back(solution);
+            return;
+        }
+        for(int i = start; i <= n; ++i){
+            
+            solution.push_back(i);
+            combineHelper(res, solution, i+1, k, n);
+            solution.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int> > res;
+        if(n < k) {
+            return res;
+        }
+        
+        vector<int> solution;
+        combineHelper(res, solution, 1, k, n);
+        return res;
+    }
+};
