@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int n = s.size();
+        if(n <= 1) {
+            return true;
+        }
+        int start = 0;
+        int end = n-1;
+        while(start < end) {
+            if(isalnum(s[start]) && isalnum(s[end])){
+                if(toupper(s[start]) == toupper(s[end])){
+                    start++;
+                    end--;
+                }
+                else{
+                    return false;
+                }
+            }
+            else if(!isalnum(s[start])){
+                start++;
+            }
+            else{
+                end--;
+            }
+        }
+        return true;
+    }
+};
