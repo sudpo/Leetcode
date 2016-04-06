@@ -1,0 +1,25 @@
+class Solution {
+    void subSetHelper(vector<int> &nums, vector<int> &solution, int start, vector<vector<int> > &res){
+        res.push_back(solution);
+        for(int i = start; i < nums.size(); ++i) {
+            if(i == start || nums[i] != nums[i-1]) {
+                solution.push_back(nums[i]);
+                subSetHelper(nums, solution, i+1, res);
+                solution.pop_back();
+            }
+        }
+    }
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int> > res;
+        if(n == 0){
+            return res;
+        }
+        sort(nums.begin(), nums.end());
+        vector<int> solution;
+        
+        subSetHelper(nums, solution, 0, res);
+        return res;
+    }
+};
