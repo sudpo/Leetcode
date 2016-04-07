@@ -1,0 +1,33 @@
+class Solution {
+    void permuteHelper(vector<int> &nums, vector<vector<int> > &res, vector<int> solution, vector<bool> &isUsed) {
+        if(solution.size() == nums.size()) {
+            res.push_back(solution);
+            return;
+        }
+        for(int i = 0; i < nums.size(); ++i) {
+            if(isUsed[i] == false) {
+                solution.push_back(nums[i]);
+                isUsed[i] = true;
+                permuteHelper(nums, res, solution, isUsed);
+                solution.pop_back();
+                isUsed[i] = false;
+            }
+        } 
+        
+    }
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int> > res;
+        if(n == 0) {
+            return res;
+        }
+        
+        vector<bool> isUsed(n, false);
+        vector<int> solution;
+        permuteHelper(nums, res, solution, isUsed);
+        
+        return res;
+        
+    }
+};
