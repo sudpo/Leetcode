@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int totalNQueens(int n) {
+        if(n <= 1) {
+            return 1;
+        }
+        
+        vector<vector<int> > res;
+        vector<int> solution;
+        search(n, res, solution);
+        return res.size();
+        
+    }
+    
+    void search(int n, vector<vector<int> > &res, vector<int> solution) {
+        if(solution.size() == n) {
+            res.push_back(solution);
+        }
+        for(int i = 0; i < n; ++i) {
+            if(isValid(solution, i)) {
+                solution.push_back(i);
+                search(n, res, solution);
+                solution.pop_back();
+            }
+        }
+    }
+    
+    bool isValid(vector<int> cols, int col) {
+        int row = cols.size(); 
+        for(int i = 0; i < row; ++i) {
+            if(cols[i] == col ) {
+                return false;
+            }
+            if(i - cols[i] == row - col) {
+                return false;
+            }
+            if(i + cols[i] == row + col) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
