@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int maxProfit(int m, vector<int>& prices) {
+        int n = prices.size();
+        if(n <= 1) {
+            return 0;
+        }
+        
+        int maxprof = 0;
+        if(m >= n) {
+            for(int i = 1; i < n; ++i){
+                if(prices[i] > prices[i-1]) {
+                    maxprof += prices[i] - prices[i-1];
+                }
+            }
+            return maxprof;
+        }
+        
+        const int K = m;
+        vector<vector<int> > dp(K+1, vector<int>(n, 0));
+        //dp[k][i] means the max profit up until prices[i] with at most k transactions
+        //dp[k][i] = max(dp[k][i-1], prices[i] - prices[j] + dp[k-1][j]) (j from 0 to i-1)
+        //         = max(dp[k][i-1], prices[i] + max(dp[k-1][j] -prices[j]))
+        
+        for(int k = 1; k <= K; ++k) {
+            int tmpMax = dp[k-1][0] - prices[0];
+            for(int i = 1; i < n; ++i) {
+                dp[k][i] = max(dp[k][i-1], prices[i] + tmpMax);
+                tmpMax = max(tmpMax, dp[k-1][i] - prices[i]);
+                maxprof = max(maxprof, dp[k][i]); 
+            }
+        }
+        
+        return maxprof;
+    }
+};
+    
