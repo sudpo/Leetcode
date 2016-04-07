@@ -1,0 +1,42 @@
+class Solution {
+    
+    void gpHelper(int rightP, int leftP, vector<string> &res, string &solution){
+        if(rightP == 0 && leftP == 0) {
+            res.push_back(solution);
+            return;
+        }
+        if(rightP == leftP) {
+            solution.push_back('(');
+            gpHelper(rightP-1, leftP, res, solution);
+            solution.pop_back();
+        }
+        else if(rightP == 0) {
+            solution.push_back(')');
+            gpHelper(rightP, leftP-1, res, solution);
+            solution.pop_back();
+        }
+        else{
+            solution.push_back('(');
+            gpHelper(rightP-1, leftP, res, solution);
+            solution.pop_back();
+            solution.push_back(')');
+            gpHelper(rightP, leftP-1, res, solution);
+            solution.pop_back();
+        }
+        
+    }
+    
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        if(n == 0) {
+            return res;
+        }
+        
+        string solution;
+        solution.push_back('(');
+        gpHelper(n-1, n, res, solution);
+        return res;
+        
+    }
+};
