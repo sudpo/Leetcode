@@ -1,0 +1,48 @@
+This problem is a little tricky at first glance. However, if you have finished the House Robber problem, this problem can simply be decomposed into two House Robber problems. Suppose there are n houses, since house 0 and n - 1 are now neighbors, we cannot rob them together and thus the solution is now the maximum of
+
+Rob houses 0 to n - 2;
+Rob houses 1 to n - 1.
+
+
+class Solution {
+    int robHelper(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) {
+            return 0;
+        }
+        if(n == 1) {
+            return nums[0];
+        }
+        int twoBefore = nums[0];
+        int oneBefore = max(nums[0], nums[1]);
+        
+        int maxRes = max(twoBefore, oneBefore);
+        
+        for(int i = 2; i < n; ++i){
+            int temp = max(twoBefore + nums[i], oneBefore);
+            twoBefore = oneBefore;
+            oneBefore = temp;
+            maxRes = max(temp, maxRes);
+        }
+        
+        return maxRes;
+    }
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) {
+            return 0;
+        }
+        if(n == 1){
+            return nums[0];
+        }
+        int temp = nums[n-1];
+        nums.pop_back();
+        int incFirst = robHelper(nums);
+        nums.push_back(temp);
+        nums.erase(nums.begin());
+        int incLast = robHelper(nums);
+        return max(incFirst, incLast);
+        
+    }
+};
