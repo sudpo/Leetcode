@@ -1,0 +1,26 @@
+//思路当之前的和小于0的时候开始从头计算
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) {
+            return 0;
+        }
+        
+        int maxSubarray = nums[0];
+        int res = maxSubarray;
+        for(int i = 1; i < n; ++i) {
+            if(maxSubarray > 0) {
+                maxSubarray += nums[i];
+            }
+            else{
+                maxSubarray = nums[i];
+            }
+            res = max(res, maxSubarray);
+        }
+        return res;
+        
+    }
+};
