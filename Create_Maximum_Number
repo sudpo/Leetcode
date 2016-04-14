@@ -1,0 +1,160 @@
+思路： 
+第一步Given one array of length n, create the maximum number of length k.
+The solution to this problem is Greedy with the help of stack. The recipe is as following
+
+Initialize a empty stack
+Loop through the array nums
+pop the top of stack if it is smaller than nums[i] until
+stack is empty
+the digits left is not enough to fill the stack to size k
+if stack size < k push nums[i]
+Return stack
+Since the stack length is known to be k, it is very easy to use an array to simulate the stack.
+The time complexity is O(n) since each element is at most been pushed and popped once.
+
+code:
+
+  vector<int> maxNumber(vector<int> &nums, int k){
+        int n = nums.size();
+        vector<int> res(k,0);
+        int j = 0;
+        for(int i = 0; i < n; ++i) {
+            while(j > 0 && n-i+j > k && nums[i] > res[j-1]){
+                j--;
+            }
+            if(j < k) {
+                res[j] = nums[i];
+                j++;
+            }
+        }
+        return res;
+    }
+第二步： Given two array of length m and n, create maximum number of length k = m + n.
+
+OK, this version is a lot closer to our original problem with the exception that we will use all the digits we have.
+
+Still, for this version, Greedy is the first thing come to mind. We have k decisions to make, 
+each time will just need to decide ans[i] is from which of the two. It seems obvious, we should always 
+choose the larger one right? This is correct, but the problem is what should we do if they are equal?
+
+This is not so obvious. The correct answer is we need to see what behind the two to decide. For example,
+
+nums1 = [6, 7]
+nums2 = [6, 0, 4]
+k = 5
+ans = [6, 7, 6, 0, 4]
+
+We decide to choose the 6 from nums1 at step 1, because 7 > 0. 
+What if they are equal again? We continue to look the next digit until they are not equal. 
+If all digits are equal then choose any one is ok. The procedure is like the merge in a merge sort. 
+However due to the “look next until not equal”, the time complexity is O(nm).
+
+code: 
+    bool compare(vector<int> &num1, int i, vector<int> &num2, int j) {
+        while(i < num1.size() && j < num2.size() && num1[i] == num2[j] ){
+            i++;
+            j++;
+        }
+        return i == num1.size() || (j != num2.size() && num1[i] < num2[j]);
+    }
+    
+    vector<int> merge(vector<int> &nums1, vector<int> &nums2) {
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        vector<int> res;
+        int i = 0, j = 0;
+        while( i < n1 || j < n2) {
+            if(compare(nums1, i, nums2, j )) {
+                res.push_back(nums2[j]);
+                j++;
+            }
+            else{
+                res.push_back(nums1[i]);
+                i++;
+            }
+        }
+        return res;
+    }
+
+Now let’s go back to the real problem. 
+First, we divide the k digits required into two parts, i and k-i. 
+We then find the maximum number of length i in one array and the maximum number of length k-i in the other array 
+using the algorithm in section 1. Now we combine the two results in to one array using the algorithm in section 2. 
+After that we compare the result with the result we have and keep the larger one as final answer.
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+public:
+    vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+        vector<int> res;
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        bool first = true;
+        if(n1 + n2 < k) {
+            return res;
+        }
+        
+        for(int i = 0 ; i <= k; ++i) {
+            if( i > n1 || k-i > n2) {
+                continue;
+            }
+            vector<int> maxNum1 = maxNumber(nums1, i);
+            vector<int> maxNum2 = maxNumber(nums2, k-i);
+            
+            vector<int> candidate = merge(maxNum1, maxNum2);
+            if(first) {
+                res = candidate;
+                first = false;
+            }
+            else if (compare(res, 0, candidate, 0)) {
+                res = candidate;
+            }
+        }
+        return res;
+    }
+    
+    vector<int> maxNumber(vector<int> &nums, int k){
+        int n = nums.size();
+        vector<int> res(k,0);
+        int j = 0;
+        for(int i = 0; i < n; ++i) {
+            while(j > 0 && n-i+j > k && nums[i] > res[j-1]){
+                j--;
+            }
+            if(j < k) {
+                res[j] = nums[i];
+                j++;
+            }
+        }
+        return res;
+    }
+    
+    bool compare(vector<int> &num1, int i, vector<int> &num2, int j) {
+        while(i < num1.size() && j < num2.size() && num1[i] == num2[j] ){
+            i++;
+            j++;
+        }
+        return i == num1.size() || (j != num2.size() && num1[i] < num2[j]);
+    }
+    
+    vector<int> merge(vector<int> &nums1, vector<int> &nums2) {
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        vector<int> res;
+        int i = 0, j = 0;
+        while( i < n1 || j < n2) {
+            if(compare(nums1, i, nums2, j )) {
+                res.push_back(nums2[j]);
+                j++;
+            }
+            else{
+                res.push_back(nums1[i]);
+                i++;
+            }
+        }
+        return res;
+    }
+};
