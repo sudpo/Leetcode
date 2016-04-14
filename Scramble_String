@@ -8,17 +8,16 @@ public:
         }
         
         int len = s1.length();
-        int count[26] = {0};
-        for(int i=0; i<len; i++)
-        {
-            count[s1[i]-'a']++;
-            count[s2[i]-'a']--;
+        unordered_map<char, int> test;
+        
+        for(int i = 0; i < len; ++i) {
+            test[s1[i]]++;
         }
-
-        for(int i=0; i<26; i++)
-        {
-            if(count[i]!=0)
+        for(int i = 0; i< len; ++i) {
+            test[s2[i]]--;
+            if(test[s2[i]] < 0) {
                 return false;
+            }
         }
         
         for(int i = 1; i < len; ++i) {
