@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        int n = s.size();
+        if(n == 0) {
+            return true;
+        }
+        
+        int maxLen = 0;
+        for(auto it = wordDict.begin(); it != wordDict.end(); ++it){
+            maxLen = max(maxLen, int ((*it).size()));
+        }
+        
+        vector<bool> dp(n+1, false);
+        dp[0] = true;
+        for(int i = 1; i <=n; ++i) {
+            for(int j = 0; j < i; ++j) {
+                if(i-j > maxLen){
+                    continue;
+                }
+                if(wordDict.find(s.substr(j, i-j)) != wordDict.end() && dp[j]){
+                    dp[i] = true;
+                    continue;
+                }
+            }
+        }
+        return dp[n];
+        
+    }
+};
