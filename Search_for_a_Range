@@ -1,0 +1,61 @@
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+       
+        vector<int> res(2, -1);
+        
+        int n = nums.size();
+        if(n == 0) {
+            return res;
+        }
+        if(target > nums[n-1] || target < nums[0]) {
+            return res;
+        }
+        int start = 0;
+        int end = n-1;
+        
+        int lowerbound = -1;
+        int upperbound = -1;
+        //find the lower bound 
+        while(start + 1 < end) {
+            int mid = start + (end - start) /2 ;
+            if(nums[mid] >= target) {
+                end = mid;
+            }
+            else {
+                start = mid;
+            }
+        }
+        if(nums[start] == target) {
+            lowerbound = start;
+        }
+        else if(nums[end] == target){
+            lowerbound = end;
+        }
+        
+        //find the upper bound
+        start = 0;
+        end = n -1;
+        while(start + 1 < end) {
+            int mid = start + (end -start) /2; 
+            if(nums[mid] <= target){
+                start = mid;
+            }
+            else{
+                end = mid;
+            }
+        }
+        
+        if(nums[end] == target) {
+            upperbound = end;
+        }
+        else if(nums[start] == target){
+            upperbound = start;
+        }
+    res[0] = lowerbound;
+    res[1] = upperbound;
+    return res;
+    }
+    
+    
+};
