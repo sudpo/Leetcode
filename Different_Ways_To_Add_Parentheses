@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        int n = input.size();
+        vector<int> res;
+        for(int i = 0; i < n; ++i) {
+            char cur = input[i];
+            if(cur == '+' || cur == '-' || cur == '*') {
+                vector<int> left = diffWaysToCompute(input.substr(0, i));
+                vector<int> right = diffWaysToCompute(input.substr(i+1));
+                for(int j = 0; j < left.size(); ++j) {
+                    for(int k = 0; k < right.size(); ++k) {
+                        if(cur == '+') {
+                            res.push_back(left[j] + right[k]);
+                        }
+                        else if (cur == '-') {
+                            res.push_back(left[j] - right[k]);
+                        }
+                        else{
+                            res.push_back(left[j] * right[k]);
+                        }
+                    }
+                }
+            }
+        }
+        if(res.empty()) {
+            res.push_back(atoi(input.c_str()));
+        }
+        
+        return res;
+        
+    }
+};
