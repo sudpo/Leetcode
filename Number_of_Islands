@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int res = 0;
+        int n = grid.size();
+        if(n == 0) {
+            return res;
+        }
+        int m = grid[0].size();
+        if(m == 0) {
+            return res;
+        }
+        
+        
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < m; ++j) {
+                queue<pair<int, int>> helper;
+                if(grid[i][j] == '1') {
+                    res++;
+                    helper.push(make_pair(i,j));
+                    grid[i][j] = '#';
+                    while(!helper.empty()){
+                        pair<int, int> curr = helper.front();
+                        helper.pop();
+                        int ci = curr.first;
+                        int cj = curr.second;
+                        if(ci - 1 >= 0  && grid[ci-1][cj] == '1' ){
+                            helper.push(make_pair(ci-1, cj));
+                            grid[ci-1][cj] = '#';
+                        }
+                        if(ci + 1 < n && grid[ci+1][cj] == '1'){
+                            helper.push(make_pair(ci+1, cj));
+                            grid[ci+1][cj] = '#';
+                        }
+                        if(cj - 1 >= 0  && grid[ci][cj-1] == '1' ){
+                            helper.push(make_pair(ci, cj-1));
+                            grid[ci][cj-1] = '#';
+                        }
+                        if(cj + 1 < m && grid[ci][cj+1] == '1'){
+                            helper.push(make_pair(ci, cj+1));
+                            grid[ci][cj+1] = '#';
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+        
+    }
+};
