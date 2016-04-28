@@ -1,0 +1,55 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if(head == NULL || head->next == NULL || head->next->next == NULL) {
+            return;
+        }
+        
+        ListNode *pre = NULL;
+        ListNode *mid = head;
+        ListNode *fast = head;
+        while(fast != NULL && fast->next != NULL) {
+            pre = mid;
+            mid = mid->next;
+            fast = fast->next->next;
+        }
+        
+        pre->next = NULL;
+        mid = reverse(mid);
+        ListNode *curr = head;
+        head = head->next;
+        while(head != NULL && mid != NULL){
+            curr->next = mid;
+            mid = mid->next;
+            curr = curr->next;
+            curr->next = head;
+            head = head->next;
+            curr = curr->next;
+        }
+        if(mid != NULL) {
+            curr->next = mid;
+        }
+    }
+    
+    ListNode * reverse(ListNode *head) {
+        if(head == NULL) {
+            return head;
+        }
+        ListNode *pre = NULL;
+        while(head != NULL) {
+            ListNode *temp = head->next;
+            head->next = pre;
+            pre = head;
+            head = temp;
+        }
+        return pre;
+    }
+};
