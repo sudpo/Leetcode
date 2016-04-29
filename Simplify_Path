@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string simplifyPath(string path) {
+        if(path.size() == 0) {
+            return path;
+        }
+        
+        string res;
+        vector<string> stk;
+        stringstream ss(path);
+        string tmp;
+        
+        while(getline(ss, tmp, '/')){
+            if(tmp == "" || tmp == "."){
+                continue;
+            }
+            if(tmp == ".." and !stk.empty()) {
+                stk.pop_back();
+            }else if(tmp != "..") {
+                stk.push_back(tmp);
+            }
+        }
+        
+        for(int i = 0; i <stk.size(); ++i) {
+            res += "/" + stk[i];
+        }
+        return res.empty() ? "/" : res;
+    }
+};
