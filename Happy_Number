@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool isHappy(int n) {
+        if(n == 0) {
+            return false;
+        }
+        set<int> visited;
+        return isHappy(n, visited);
+        
+    }
+    
+    bool isHappy(int n, set<int> &visited){
+        if(n == 1) {
+            return true;
+        }
+        if(visited.find(n) != visited.end()){
+            return false;
+        }
+        else{
+            visited.insert(n);
+            int newNumber = 0;
+            while(n > 0) {
+                newNumber += (n % 10) * (n % 10);
+                n = n / 10;
+            }
+            return isHappy(newNumber, visited);
+        }
+    }
+};
