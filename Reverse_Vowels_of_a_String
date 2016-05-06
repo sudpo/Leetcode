@@ -1,0 +1,22 @@
+class Solution {
+public:
+    string reverseVowels(string s) {
+        int start = 0;
+        int end = s.size() - 1;
+        set<char> st{'a', 'e', 'i', 'o', 'u', 'A', 'E','I','O','U' };
+        while(start < end){
+            while(st.find(s[start]) == st.end()){
+                start++;
+            }
+            while(st.find(s[end]) == st.end()){
+                end--;
+            }
+            if(start < end) {
+                swap(s[start], s[end]);
+                start++;
+                end--;
+            }
+        }
+        return s;
+    }
+};
