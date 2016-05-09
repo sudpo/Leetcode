@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x < 0) {
+            return false;
+        }
+        if(x == 0) {
+            return true;
+        }
+        long len = 1;
+        int temp = x;
+        while(temp > 0) {
+            len *= 10;
+            temp /= 10;
+        }
+        long mod = 1;
+        int last = 0;
+        int first = 0;
+        while(mod <= len){
+            int last = (x % (mod*10)) /mod;
+            int first = (x % len) / (len/10);
+            if(first != last) {
+                return false;
+            }
+            mod *= 10;
+            len /= 10;
+        }
+        return true;
+    }
+};
