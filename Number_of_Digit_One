@@ -4,7 +4,7 @@
 
 // A number is divided into three parts, front, curDigit and rear. For example, if input is 123456789, when we are considering the situation if we set the digit 5 to 1, then:
 
-front = 1234, curDigit = 5, rear = 6789, rearSize = 1000
+front = 1234, curDigit = 5, rear = 6789, rearSize = 10000
 
 class Solution {
 public:
