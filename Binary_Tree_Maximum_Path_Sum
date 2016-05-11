@@ -1,0 +1,27 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ * http://bangbingsyb.blogspot.com/2014/11/leetcode-binary-tree-maximum-path-sum.html
+ */
+class Solution {
+    int maxPathSum(TreeNode *root, int &result){
+        if(root == NULL){
+            return 0;
+        }
+        int left = max(0, maxPathSum(root->left, result));
+        int right = max(0, maxPathSum(root->right, result));
+        result = max(result, left+right+root->val);
+        return max(left, right) + root->val;
+    }
+public:
+    int maxPathSum(TreeNode* root) {
+        int result = INT_MIN;
+        maxPathSum(root, result);
+        return result;
+    }
+};
