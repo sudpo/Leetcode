@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<vector<int> > graph(numCourses);
+        vector<int> dep(numCourses, 0);
+        
+        for(int i = 0; i <prerequisites.size(); i++){
+            graph[prerequisites[i].second].push_back(prerequisites[i].first);
+            dep[prerequisites[i].first]++;
+        }
+        
+        int cnt = 0;
+        while(true){
+            bool flag = false;
+            for(int i = 0; i < numCourses; ++i) {
+                if(dep[i] == 0) {
+                    dep[i] = - 1;
+                    cnt++;
+                    flag = true;
+                    for(int j = 0; j < graph[i].size(); ++j) {
+                        dep[graph[i][j]]--;
+                    }
+                }
+            }
+            if(flag == false) {
+                break;
+            }
+        }
+        return cnt == numCourses;
+    }
+};
