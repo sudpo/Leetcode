@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<vector<int> > hash(numCourses, vector<int>());
+        vector<int> degree(numCourses, 0);
+        
+        for(int i = 0; i < prerequisites.size(); ++i ){
+            hash[prerequisites[i].second].push_back(prerequisites[i].first);
+            degree[prerequisites[i].first]++;
+        }
+        
+        vector<int> res;
+        while(true){
+            bool flag = false;
+            for(int i = 0; i < numCourses; ++i) {
+                if(degree[i] == 0){
+                    degree[i] = -1;
+                    res.push_back(i);
+                    flag = true;
+                    for(int j = 0; j < hash[i].size(); ++j) {
+                        degree[hash[i][j]]--;
+                    }
+                }
+            }
+            if(flag == false){
+                break;
+            }
+        }
+        if(res.size() != numCourses){
+            vector<int> tmp;
+            return tmp;
+        }
+        return res;
+        
+    }
+};
