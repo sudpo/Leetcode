@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        set<long> window;
+        if(k == 0) {
+            return false;
+        }
+        int l = 0;
+        for(int i = 0; i < nums.size(); ++i) {
+            if(i - l > k) {
+                window.erase(nums[l++]);
+            }
+            auto it = window.lower_bound(long (nums[i]) - long(t) );
+            //here we get *it - nums[i] >= -t
+            //so we need *it - nums[i] <= t to make sure that |*it - nums[i]| <= t
+            if(it != window.end() && *it <= long(nums[i]) + long(t)){
+                return true;
+            }
+            window.insert(nums[i]);
+        }
+        return false;
+        
+    }
+};
