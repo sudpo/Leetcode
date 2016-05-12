@@ -1,0 +1,44 @@
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+class Solution {
+public:
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if(node == NULL) {
+            return NULL;
+        }
+        unordered_map<UndirectedGraphNode *, UndirectedGraphNode *> hash;
+        queue<UndirectedGraphNode *> qu;
+        qu.push(node);
+        while(!qu.empty()){
+            int n = qu.size();
+            for(int i = 0; i < n; ++i) {
+                UndirectedGraphNode *tmp = qu.front();
+                qu.pop();
+                UndirectedGraphNode *newNode = new UndirectedGraphNode(tmp->label);
+                hash[tmp] = newNode;
+                for(int j = 0; j < tmp->neighbors.size(); ++j) {
+                    if(hash.find(tmp->neighbors[j]) == hash.end()){
+                        qu.push(tmp->neighbors[j]);
+                    }
+                }
+            }
+        }
+        
+        unordered_map<UndirectedGraphNode *, UndirectedGraphNode *> :: iterator it;
+        for(it = hash.begin(); it != hash.end(); ++it){
+            UndirectedGraphNode *old = it->first;
+            UndirectedGraphNode *clone = it->second;
+            for(int i = 0; i < old->neighbors.size(); ++i){
+                clone->neighbors.push_back(hash[old->neighbors[i]]);
+            }
+        }
+        
+        return hash[node];
+    }
+};
