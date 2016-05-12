@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<string> findItinerary(vector<pair<string, string>> tickets) {
+        unordered_map<string, multiset<string> > graph;
+        vector<string> res;
+        if(tickets.size() == 0){
+            return res;
+        }
+        
+        for(int i = 0; i < tickets.size(); ++i){
+            graph[tickets[i].first].insert(tickets[i].second);
+        }
+        
+        stack<string> dfs;
+        dfs.push("JFK");
+        while(!dfs.empty()){
+            string currAirport = dfs.top();
+            if(graph[currAirport].empty()){
+                res.push_back(currAirport);
+                dfs.pop();
+            }
+            else{
+                dfs.push(*(graph[currAirport].begin()));
+                graph[currAirport].erase(graph[currAirport].begin());
+            }
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
