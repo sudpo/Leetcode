@@ -1,0 +1,50 @@
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPoints(vector<Point>& points) {
+        if(points.size() <= 2) {
+            return points.size();
+        }
+        int res = 0;
+        for(int i = 0; i < points.size() - 1; ++i) {
+            unordered_map<double, int > slopeMap;
+            unordered_map<int, int> verticalMap;
+            unordered_map<int, int> horiMap;
+            int samePoint = 1;
+            for(int j = i+1; j < points.size(); ++j) {
+                if(points[i].x != points[j].x && points[i].y != points[j].y){
+                    double slope =double (points[i].y - points[j].y)/ (points[i].x - points[j].x);
+                    slopeMap[slope] += 1;
+                }else if(points[i].x == points[j].x && points[i].y != points[j].y) {
+                    verticalMap[points[i].x] += 1;
+                }else if(points[i].x != points[j].x && points[i].y == points[j].y) {
+                    horiMap[points[j].y] += 1;
+                }
+                else{
+                    samePoint++;
+                }
+            }
+            int localMax = 0;
+            for(auto i = slopeMap.begin(); i != slopeMap.end(); ++i){
+                localMax = max(localMax, i->second);
+            }
+            for(auto i = verticalMap.begin(); i != verticalMap.end(); ++i) {
+                localMax = max(localMax, i->second);
+            }
+            for(auto i = horiMap.begin(); i != horiMap.end(); ++i) {
+                localMax = max(localMax, i->second);
+            }
+            localMax += samePoint;
+            res = max(res, localMax);
+        }
+        return res;
+    }
+};
