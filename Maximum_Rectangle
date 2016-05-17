@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.size() == 0) {
+            return 0;
+        }
+        
+        int maxRec = 0;
+        vector<int> height(matrix[0].size(), 0);
+        for(int i = 0; i < matrix.size(); ++i) {
+            for(int j = 0; j < matrix[0].size(); ++j) {
+                if(matrix[i][j] == '0'){
+                    height[j] = 0;
+                }
+                else{
+                    height[j]++;
+                }
+            }
+            maxRec = max(maxRec, largestRectangleArea(height));
+        }
+        return maxRec;
+    }
+    
+    int largestRectangleArea(vector<int> heights){
+        stack<int> increasing_height;
+        heights.push_back(0);
+        int maxSize = 0;
+        int i = 0;
+        while(i < heights.size()){
+            if(increasing_height.empty() || heights[i] > heights[increasing_height.top()]){
+                increasing_height.push(i);
+                i++;
+            }
+            else{
+                int last = increasing_height.top();
+                increasing_height.pop();
+                if(increasing_height.empty()){
+                    maxSize = max(maxSize, heights[last] * (i - 1 - (-1)));
+                }
+                else{
+                    maxSize = max(maxSize, heights[last] * (i - 1 - increasing_height.top()));
+                }
+                
+            }
+        }
+        return maxSize;
+    }
+};
