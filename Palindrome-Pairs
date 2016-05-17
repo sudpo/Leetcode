@@ -1,0 +1,63 @@
+//关键点 切分成三个部分
+
+
+class Solution {
+    bool isPalindrome(string s){
+        if(s.empty() || s.size() == 1) {
+            return true;
+        }
+        int start = 0;
+        int end = s.size() - 1;
+        while(start < end){
+            if(s[start] != s[end]){
+                return false;
+            }
+            else{
+                start++;
+                end--;
+            }
+        }
+        return true;
+    }
+public:
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        vector<vector<int> > res;
+        if(words.size() <= 1) {
+            return res;
+        }
+        unordered_map<string, int> word_idx;
+        for(int i = 0; i < words.size(); ++i) {
+            word_idx[words[i]] = i;
+        }
+        vector<int> solution(2,0);
+        for(int i = 0; i < words.size(); ++i) {
+            int len = words[i].size();
+            for(int l = 0; l <= len; ++l) {
+                string left  = words[i].substr(0,l);
+                string right = words[i].substr(l);
+                string rleft = left;
+                string rright = right;
+                reverse(rleft.begin(), rleft.end());
+                reverse(rright.begin(), rright.end());
+                
+                if(word_idx.find(rleft) != word_idx.end()) {
+                    if(word_idx[rleft] != i && isPalindrome(right)){
+                        solution[0] = i;
+                        solution[1] = word_idx[rleft];
+                        res.push_back(solution);
+                    }
+                }
+                
+                if(l != 0 && word_idx.find(rright) != word_idx.end()) {
+                    if(word_idx[rright] != i && isPalindrome(left)) {
+                        solution[0] = word_idx[rright];
+                        solution[1] = i;
+                        res.push_back(solution);
+                    } 
+                }
+            }
+        }
+        
+        return res;
+    }
+};
