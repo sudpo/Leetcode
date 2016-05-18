@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int compareVersion(string version1, string version2) {
+        int ver1 = 0;
+        int ver2 = 0;
+        int i = 0;
+        int j = 0;
+        while( i < version1.size() || j < version2.size()) {
+            while(isdigit(version1[i]) && i < version1.size()){
+                ver1 = ver1 * 10 + version1[i] - '0';
+                i++;
+            }
+            while(isdigit(version2[j]) && j < version2.size()){
+                ver2 = ver2 * 10 + version2[j] - '0';
+                j++;
+            }
+            if(ver1 < ver2){
+                return -1;
+            }
+            if(ver2 < ver1){
+                return 1;
+            } 
+            
+            ver1 = 0;
+            ver2 = 0;
+            i++;
+            j++;
+        }
+        return 0;
+    }
+};
