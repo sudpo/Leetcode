@@ -1,0 +1,31 @@
+class Solution {
+    void addOperators(vector<string> &res, string nums, string solution, long long curVal, long long last, int target ){
+        if(nums.size() == 0) {
+            if(curVal == target){
+                res.push_back(solution);
+            }
+            return;
+        }
+        
+        for(int i = 1; i <= nums.length(); ++i){
+            string num = nums.substr(0, i);
+            if(num.size() > 1 && nums[0] == '0'){
+                return;
+            }
+            string nextNum = nums.substr(i);
+            if(solution.size() > 0) {
+                addOperators(res, nextNum, solution + "+" + num, curVal + stoll(num), stoll(num), target);
+                addOperators(res, nextNum, solution + "-" + num, curVal - stoll(num), -stoll(num), target);
+                addOperators(res, nextNum, solution + "*" + num, (curVal - last) + last * stoll(num), last * stoll(num), target);
+            }else {
+                addOperators(res, nextNum, num, stoll(num), stoll(num), target);
+            }
+        }
+    }
+public:
+    vector<string> addOperators(string num, int target) {
+        vector<string> res;
+        addOperators(res, num, "", 0, 0, target);
+        return res;
+    }
+};
