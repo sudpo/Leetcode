@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int myAtoi(string str) {
+        if(str.size() == 0) {
+            return 0;
+        }
+        
+        while(str.size() != 0) {
+            if(str[0] == ' '){
+                str.erase(0,1);
+            }
+            else{
+                break;
+            }
+        }
+        
+        if(str.size() == 0) {
+            return 0;
+        }
+        bool sign = true;
+        if(str[0] == '-'){
+            str.erase(0,1);
+            sign = false;
+        }
+        else if(str[0] == '+'){
+            str.erase(0,1);
+        }
+        
+        cout<<str<<endl;
+        long long res = 0;
+        for(int i = 0; i < str.size(); ++i){
+            if(isdigit(str[i])){
+                res = res * 10 + str[i] -'0';
+                if(sign && res >= INT_MAX){
+                    return INT_MAX;
+                }
+                if(!sign && -res <= INT_MIN){
+                    return INT_MIN;
+                }
+            }
+            else break;
+        }
+        
+        if(sign){
+            return res;
+        }
+        else{
+            return -res;
+        }
+    }
+};
