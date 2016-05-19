@@ -1,0 +1,50 @@
+class Solution {
+public:
+    bool isNumber(string s) {
+        bool numFlag = false;
+        bool expFlag = false;
+        bool dotFlag = false;
+        
+        if(s.size() == 0) {
+            return false;
+        }
+        
+        int end = s.size() - 1;
+        int start = 0;
+        while(end >= 0 && s[end] == ' ' ){
+            end--;
+        }
+        
+        while(start < end && s[start] == ' '){
+            start++;
+        }
+        
+        for(int i = start; i <= end; ++i){
+            if(s[i] == 'e'){
+                if(expFlag || !numFlag){
+                    return false;
+                }
+                expFlag = true;
+                numFlag = false;
+            }
+            else if(s[i] == '.'){
+                if(dotFlag || expFlag){
+                    return false;
+                }
+                dotFlag = true;
+            }
+            else if(isdigit(s[i])){
+                numFlag = true;
+            }
+            else if(s[i] == '+' || s[i] == '-'){
+                if(i != start && s[i-1] != 'e'){
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+        return numFlag;
+    }
+};
