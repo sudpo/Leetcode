@@ -1,0 +1,29 @@
+class Solution {
+    vector<long long> buildPreFixSum(const vector<int> &nums ){
+        vector<long long> res(nums.size() + 1, 0);
+        for(int i = 0; i < nums.size(); ++i) {
+            res[i+1] = res[i] + nums[i];
+        }
+        return res;
+    }
+public:
+    int countRangeSum(vector<int>& nums, int lower, int upper) {
+        int n = nums.size();
+        if(n == 0){
+            return 0;
+        }
+        
+        vector<long long> preFix = buildPreFixSum(nums);
+        int count = 0;
+        
+        multiset<long long> ordered_sums;
+        for(int i = n; i >= 1; --i) {
+            ordered_sums.insert(preFix[i]);
+            auto lb_iter = ordered_sums.lower_bound(lower + preFix[i-1]);
+            auto ub_iter = ordered_sums.upper_bound(upper + preFix[i-1]);
+            
+            count += distance(lb_iter, ub_iter);
+        }
+        return count;
+    }
+};
