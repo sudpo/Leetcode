@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int maximumGap(vector<int>& nums) {
+        int n = nums.size();
+        if(n < 2){
+            return 0;
+        }
+        int lower = INT_MAX;
+        int upper = INT_MIN;
+        for(int i = 0; i < nums.size(); ++i) {
+            lower = min(nums[i], lower);
+            upper = max(nums[i], upper);
+        }
+        
+        int gap = max((upper - lower) / (n-1) , 1);
+        int m = (upper - lower) / gap + 1;
+        
+        vector<int> bucketsMin(m, INT_MAX);
+        vector<int> bucketsMax(m, INT_MIN);
+        
+        for(int i = 0; i < n; ++i) {
+            int k = (nums[i] - lower) / gap;
+            bucketsMin[k] = min(bucketsMin[k], nums[i]);
+            bucketsMax[k] = max(bucketsMax[k],nums[i]);
+        }
+        
+        int i = 0, j;
+        gap = bucketsMax[0] - bucketsMin[0];
+        while(i < m) {
+            j = i + 1;
+            while(j < m && bucketsMin[j] == INT_MAX && bucketsMax[j] == INT_MIN){
+                j++;
+            }
+            if(j == m) break;
+            gap = max(gap, bucketsMin[j] - bucketsMax[i]);
+            i = j;
+        }
+        return gap;
+    }
+};
