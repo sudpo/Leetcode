@@ -1,0 +1,48 @@
+class Solution {
+    int longestPath(vector<vector<int>>& matrix, vector<vector<int> > &states, int i, int j, int n, int m){
+        if(states[i][j] != 0){
+            return states[i][j];
+        }
+        int maxd = 0;
+        if(j > 0 && matrix[i][j-1] < matrix[i][j]){
+            int left = longestPath(matrix, states, i, j-1, n, m);
+            maxd = max(maxd, left);
+        }
+        if(j<m-1 && matrix[i][j+1] < matrix[i][j]){
+            int right = longestPath(matrix, states, i, j+1,n, m);
+            maxd = max(maxd, right);
+        }
+        if(i>0 && matrix[i-1][j] < matrix[i][j]){
+            int up = longestPath(matrix, states, i-1, j, n, m);
+            maxd = max(maxd, up);
+        }
+        if(i <n-1 && matrix[i+1][j] < matrix[i][j]){
+            int down = longestPath(matrix, states, i+1, j, n, m);
+            maxd = max(maxd, down);
+        }
+        maxd += 1;
+        states[i][j] = maxd;
+        return maxd;
+    }
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        if(n == 0){
+            return 0;
+        }
+        int m = matrix[0].size();
+        if(m == 0){
+            return 0;
+        }
+        
+        int res;
+        vector<vector<int> > states(n, vector<int>(m, 0));
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j <m; ++j){
+               res = max(res, longestPath(matrix, states, i, j, n, m)) ;
+            }
+        }
+        return res;
+        
+    }
+};
