@@ -1,0 +1,54 @@
+class Solution {
+    void helper(string s, int start, int left_removed, int right_removed, int pair, string path, unordered_set<string> &res){
+        if(start == s.size()) {
+            if(left_removed == 0 && right_removed == 0 && pair == 0){
+                res.insert(path);
+            }
+            return;
+        }
+        if(s[start] != '(' && s[start] != ')'){
+            helper(s, start+1, left_removed, right_removed, pair, path+s[start], res);
+        }
+        else{
+            if(s[start] == '('){
+                if(left_removed > 0){
+                    helper(s, start+1, left_removed-1,right_removed, pair,path, res);
+                }
+                helper(s,start+1, left_removed, right_removed, pair+1, path+s[start], res);
+            }
+            if(s[start] == ')'){
+                if(right_removed > 0){
+                    helper(s, start+1, left_removed, right_removed-1, pair, path, res);
+                }
+                if(pair > 0){
+                    helper(s, start+1, left_removed, right_removed, pair-1, path+s[start], res);
+                }
+            }
+        }
+        return;
+        
+    }
+    
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        int left_removed = 0;
+        int right_removed = 0;
+        int pair = 0;
+        unordered_set<string> res;
+        for(int i = 0; i < s.size(); ++i) {
+            if(s[i] == '('){
+                left_removed++;
+            }
+            if(s[i] == ')'){
+                if(left_removed != 0) {
+                    left_removed--;
+                }
+                else{
+                    right_removed++;
+                }
+            }
+        }
+        helper(s, 0, left_removed, right_removed, 0, "", res);
+        return vector<string>(res.begin(), res.end());
+    }
+};
