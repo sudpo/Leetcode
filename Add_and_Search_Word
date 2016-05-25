@@ -1,0 +1,63 @@
+class TrieNode {
+public:
+    bool isKey;
+    vector<TrieNode*> children;
+    TrieNode(): isKey(false) {
+        for(int i = 0; i < 26; ++i){
+            children.push_back(NULL);
+        }
+    }
+};
+
+
+class WordDictionary {
+public:
+    WordDictionary() {
+        root = new TrieNode();
+    }
+    // Adds a word into the data structure.
+    void addWord(string word) {
+        TrieNode *curr = root;
+        for(int i = 0; i < word.size(); ++i){
+            if(!(curr->children[word[i] -'a'])){
+                curr->children[word[i] - 'a'] = new TrieNode();
+            }
+            curr = curr->children[word[i] - 'a'];
+        }
+        curr->isKey = true;
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    bool search(string word) {
+        return query(word, root);
+    }
+private: 
+    TrieNode *root;
+    bool query(string word, TrieNode* node){
+        TrieNode *curr = node;
+        for(int i = 0; i < word.size(); ++i){
+            if(curr && word[i] != '.'){
+                curr = curr->children[word[i]-'a'];
+            }
+            else if(curr && word[i] == '.'){
+                TrieNode *tmp = curr;
+                for(int j = 0; j < 26; ++j){
+                    curr = tmp->children[j];
+                    string newWord = word.substr(i+1);
+                    if(query(newWord, curr)){
+                        return true;
+                    }
+                }
+            }else{
+                break;
+            }
+        }
+        return curr && curr->isKey;
+    }
+};
+
+// Your WordDictionary object will be instantiated and called as such:
+// WordDictionary wordDictionary;
+// wordDictionary.addWord("word");
+// wordDictionary.search("pattern");
